@@ -26,6 +26,7 @@ stdL <- grepl("std",features$V2)
 ##Merge the training and test data sets
 featureValues <- rbind(testx,trainx)
 labelValues<-rbind(testy,trainy)
+subjectIds <- rbind(testsub,trainsub)
 
 colNames <- c(features$V2[meansL | stdL])
 
@@ -33,13 +34,13 @@ colNames <- c(features$V2[meansL | stdL])
 names(labelValues) <- "ActivityLabel"
 names(featureValues) <- features$V2
 names(activityLabels)<-c("ActivityLabel","ActivityShortDescription")
-
+names(subjectIds)<-"SubjectID"
 ##Join activityLabels to labelValues to get short description
 labelValues <- join(x=labelValues,y=activityLabels,by="ActivityLabel")
 
 ##Select columns with mean and std
 selectedFeatureValues <- featureValues[, which(names(featureValues) %in% colNames)]
 
-##Now add the activity labels to the individual observations
-mergedDataSet <- cbind(labelValues,selectedFeatureValues)
+##Now add the subject Ids and activity labels to the individual observations
+mergedDataSet <- cbind(subjectIds,labelValues,selectedFeatureValues)
 

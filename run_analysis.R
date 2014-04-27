@@ -51,4 +51,4 @@ fby2 <- factor(mergedDataSet$ActivityShortDescription)
 tidyData <- aggregate(x=mergedDataSet,by=list(fby1,fby2),FUN=mean)
 
 ##Now write to a file TidySamsungData.txt
-dump(tidyData,file="TidySamsungData.txt")
+dump(list(tidyData),file="TidySamsungData.txt")

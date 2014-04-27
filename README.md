@@ -1,3 +1,5 @@
+### Peer assessed assignment to create tidy data
+
 ##run_analysis.R
 ##In this program, we will read data from the UCI HAR data set. This program assumes the data files are available 
 ##in the same folder structure as the original data set.

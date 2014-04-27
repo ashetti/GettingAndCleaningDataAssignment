@@ -46,5 +46,9 @@ selectedFeatureValues <- featureValues[, which(names(featureValues) %in% colName
 mergedDataSet <- cbind(subjectIds,labelValues,selectedFeatureValues)
 
 ##Now create the tidy data set
-tidyData <- aggregate(x=mergedDataSet,by=list(fby1),FUN=mean)
+fby1 <- factor(mergedDataSet$SubjectID)
+fby2 <- factor(mergedDataSet$ActivityShortDescription)
+tidyData <- aggregate(x=mergedDataSet,by=list(fby1,fby2),FUN=mean)
 
+##Now write to a file TidySamsungData.txt
+dump(tidyData,file="TidySamsungData.txt")

@@ -32,6 +32,16 @@ colNames <- c(features$V2[meansL | stdL])
 ##Assign names to the columns
 names(labelValues) <- "ActivityLabel"
 names(featureValues) <- features$V2
+names(activityLabels)<-c("ActivityLabel","ActivityShortDescription")
+
+##Join activityLabels to labekValues to get short description
+labelValues <- join(x=labelValues,y=activityLabels,by="ActivityLabel")
+
+##Select columns with mean and std
+selectedFeatureValues <- featureValues[, which(names(featureValues) %in% colNames)]
 
 ##Now add the activity labels to the individual observations
-mergedDataSet <- cbind(labelValues,featureValues)
+mergedDataSet <- cbind(labelValues,selectedFeatureValues)
+
+
+annotatedDataSet <- join(x=mergedDataSet,y=activityLabels,by="ActivityLabel")

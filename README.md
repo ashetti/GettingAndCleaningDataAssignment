@@ -1,52 +1,20 @@
-### Peer assessed assignment to create tidy data
+#Peer assessed assignment to create tidy data
 
 ##run_analysis.R
-##In this program, we will read data from the UCI HAR data set. This program assumes the data files are available 
-##in the same folder structure as the original data set.
-##Set up the URL's to read the test and train feature sets
+In this program, we will read data from the UCI HAR data set. This program assumes the data files are available in the same folder structure as the original data set i.e. the folder "UCI HAR Dataset" in the 
+working directory
 
-urltestx <- "./UCI HAR Dataset/test/X_test.txt"
-urltesty <- "./UCI HAR Dataset/test/y_test.txt"
-urltrainx <- "./UCI HAR Dataset/train/X_train.txt"
-urltrainy <- "./UCI HAR Dataset/train/y_train.txt"
-urltestsub <- "./UCI HAR Dataset/test/subject_test.txt"
-urltrainsub <- "./UCI HAR Dataset/train/subject_train.txt"
-urlfeatures <- "./UCI HAR Dataset/features.txt"
-urlactivityLabels <- "./UCI HAR Dataset/activity_labels.txt"
-## read the test and train feature sets and labels
-testx <-read.delim(urltestx,header=FALSE,sep="")
-testy <-read.delim(urltesty,header=FALSE,sep="")
-trainx <- read.delim(urltrainx,header=FALSE,sep="")
-trainy <- read.delim(urltrainy,header=FALSE,sep="")
-testsub <- read.delim(urltestsub,header=FALSE,sep="")
-trainsub <- read.delim(urltrainsub,header=FALSE,sep="")
-features <- read.delim(urlfeatures,header=FALSE,sep="",stringsAsFactors=FALSE)
-activityLabels<- read.delim(urlactivityLabels,header=FALSE,sep="",stringsAsFactors=FALSE)
-##Get logical vectors to identify the means and std features 
-meansL <- grepl("mean",features$V2)
-stdL <- grepl("std",features$V2)
-
-##Merge the training and test data sets
-featureValues <- rbind(testx,trainx)
-labelValues<-rbind(testy,trainy)
-subjectIds <- rbind(testsub,trainsub)
-
-colNames <- c(features$V2[meansL | stdL])
-
-##Assign names to the columns
-names(labelValues) <- "ActivityLabel"
-names(featureValues) <- features$V2
-names(activityLabels)<-c("ActivityLabel","ActivityShortDescription")
-names(subjectIds)<-"SubjectID"
-##Join activityLabels to labelValues to get short description
-labelValues <- join(x=labelValues,y=activityLabels,by="ActivityLabel")
-
-##Select columns with mean and std
-selectedFeatureValues <- featureValues[, which(names(featureValues) %in% colNames)]
-
-##Now add the subject Ids and activity labels to the individual observations
-mergedDataSet <- cbind(subjectIds,labelValues,selectedFeatureValues)
-
-##Now create the tidy data set
-tidyData <- aggregate(x=mergedDataSet,by=list(fby1),FUN=mean)
-
+The steps in this program are as follows:
+1. Set up the URL's to read the test and train feature sets
+2. Read the test and train feature sets and labels
+3. Merge the training and test data sets
+4. Assign names to the columns
+5. Join activityLabels to labelValues to get short description
+6. Identify the column variables having mean and standard deviation values
+7. Extract the columns with mean and std
+8. Cleanup column names - Remove non alpha numeric characters
+9. Expand abbreviations and capitalize words
+10. Replace the column names with the cleaned columnnames
+11. Now combine the subjectId's, and labels with the selected feature values
+12. Now create the tidy data set by taking column wise mean for each observation of subject and Activity type
+13. Dump into an output file
